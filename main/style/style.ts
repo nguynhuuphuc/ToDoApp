@@ -19,7 +19,7 @@ export const style = StyleSheet.create({
     paddingStart: 20,
     paddingEnd: 20,
     marginEnd: 20,
-    textAlign: 'center',
+    textAlign: 'left',
   },
   shadow: {
     shadowColor: '#000',
@@ -48,7 +48,6 @@ export const style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: 20,
-    marginBottom: 20,
   },
   item: {
     display: 'flex',

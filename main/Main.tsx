@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, {Component} from 'react';
+import React, {Component, ReactElement} from 'react';
 import {
   Button,
   Image,
@@ -16,49 +16,66 @@ import {
   View,
 } from 'react-native';
 import {style} from './style/style';
-class App extends Component {
-  onPress = () => {
-    console.log('Clicked');
+import {TaskItem} from '../components/TaskItem';
+import {InsertItem} from '../components/InsertItem';
+
+interface iProps {}
+
+interface iState {
+  textInput: string;
+  listTaskItem: string[];
+}
+
+class App extends Component<iProps, iState> {
+  private content: string;
+  private listItem: string[];
+
+  constructor(prop: any) {
+    super(prop);
+    this.content = '';
+    this.state = {
+      textInput: '',
+      listTaskItem: [],
+    };
+    this.listItem = [];
+  }
+
+  private _onPress = (
+    value: string,
+    textInputRef: React.MutableRefObject<TextInput>,
+  ) => {
+    if (value === undefined || value === '') return;
+    this.listItem.push(value);
+    this.setState({
+      listTaskItem: this.listItem,
+    });
+    textInputRef.current.clear();
+  };
+
+  private _onDelete = (index: number) => {
+    this.listItem.splice(index, 1);
+    this.setState({
+      listTaskItem: this.listItem,
+    });
+  };
+
+  private _renderTaskItems = (): Array<ReactElement> => {
+    return this.listItem.map((item, index) => (
+      <TaskItem
+        index={index}
+        onDelete={this._onDelete}
+        key={index}
+        content={item}
+      />
+    ));
   };
 
   render() {
     return (
       <View style={style.container}>
         <Text style={style.title}>Today's Tasks</Text>
-        <ScrollView style={style.mt_24}>
-          <View style={style.item}>
-            <View style={style.subitem}>
-              <View style={[style.square, style.mr_16]}></View>
-              <Text>Like</Text>
-            </View>
-            <View style={style.circle}></View>
-          </View>
-          <View style={[style.item, style.mt_24]}>
-            <View style={style.subitem}>
-              <View style={[style.square, style.mr_16]}></View>
-              <Text>Comment</Text>
-            </View>
-            <View style={style.circle}></View>
-          </View>
-          <View style={[style.item, style.mt_24]}>
-            <View style={style.subitem}>
-              <View style={[style.square, style.mr_16]}></View>
-              <Text>Subscribe</Text>
-            </View>
-            <View style={style.circle}></View>
-          </View>
-        </ScrollView>
-        <View style={style.wrapper}>
-          <TextInput
-            style={[style.input, style.shadow]}
-            placeholder="Write a task"
-          />
-          <TouchableOpacity
-            onPress={this.onPress}
-            style={[style.btn, style.shadow]}>
-            <Image source={require('../images/add/add.png')} />
-          </TouchableOpacity>
-        </View>
+        <ScrollView style={style.mt_24}>{this._renderTaskItems()}</ScrollView>
+        <InsertItem hint="Write a task" onPressAdd={this._onPress} />
       </View>
     );
   }
