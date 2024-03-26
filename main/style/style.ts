@@ -13,12 +13,14 @@ export const style = StyleSheet.create({
   },
   input: {
     backgroundColor: 'white',
+    flex: 1,
     flexGrow: 1,
     height: 42,
     borderRadius: 25,
     paddingStart: 20,
     paddingEnd: 20,
     marginEnd: 20,
+    marginRight: 20,
     textAlign: 'left',
   },
   shadow: {
